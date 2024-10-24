@@ -1,3 +1,4 @@
+import 'package:blogs_app/blogs/ui/blogs_details_screen.dart';
 import 'package:blogs_app/home/controller/blogs_listing_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -49,21 +50,38 @@ class _BlogsListingScreenState extends State<BlogsListingScreen> {
 
               final blogs = snapshot.data!;
 
-              return ListView.separated(
-                  itemCount: blogs.length,
-                  separatorBuilder: (context, index) {
-                    return const Divider(
-                      height: 16,
-                    );
-                  },
-                  itemBuilder: (context, index) {
-                    final blog = blogs[index];
+              return RefreshIndicator(
+                onRefresh: () => BlogsListingController().fetchBlogs(),
+                child: ListView.separated(
+                    itemCount: blogs.length,
+                    separatorBuilder: (context, index) {
+                      return const Divider(
+                        height: 16,
+                      );
+                    },
+                    itemBuilder: (context, index) {
+                      final blog = blogs[index];
 
-                    return ListTile(
-                      title: Text('${blog['title']}'),
-                      subtitle: Text('${blog['content']}'),
-                    );
-                  });
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BlogsDetailsScreen(
+                                       blog: blog
+                                      )));
+                        },
+                        child: ListTile(
+                          title: Text('${blog['title']}'),
+                          subtitle: Text(
+                            '${blog['content']}',
+                            maxLines: 3,
+                            overflow: TextOverflow.clip,
+                          ),
+                        ),
+                      );
+                    }),
+              );
             }));
   }
 }
