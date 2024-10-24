@@ -1,0 +1,5 @@
+class AppConstants{
+
+  static const supabaseProjectUrl = 'https://wivhzdgwgitciqmeiqvh.supabase.co';
+  static const anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indpdmh6ZGd3Z2l0Y2lxbWVpcXZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjk1ODcyNDQsImV4cCI6MjA0NTE2MzI0NH0.IbdnMXONJeI6XFyqezZ5fqwPvkUx56bD49NB_K2tWs8';
+}
