@@ -2,6 +2,8 @@ import 'package:blogs_app/blogs/controller/create_blog_controller.dart';
 import 'package:blogs_app/utils/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class CreateBlogScreen extends StatefulWidget {
   final String title;
@@ -32,6 +34,11 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(onPressed: (){
+            uploadImage("2");
+          }, icon: const Icon(Icons.save))
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -110,3 +117,36 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
     );
   }
 }
+
+Future<void> uploadImage(String blogId) async {
+  final picker = ImagePicker();
+  final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+  if (pickedFile == null) return;  // User canceled the picker
+
+  final file = File(pickedFile.path);
+  final fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+  try {
+    // Upload file to the 'blog-images' bucket in Supabase Storage
+    final response = await Supabase.instance.client.storage.from('images').upload(
+      'blogs/$blogId/$fileName',
+      file,
+        fileOptions: const FileOptions(cacheControl: '3600', upsert: false),
+    );
+
+  /*  if (response != null) {
+      throw Exception(response!.message);
+    }*/
+
+    // Optional: Get the public URL (if bucket is public)
+    final publicUrl = Supabase.instance.client.storage
+        .from('images')
+        .getPublicUrl('blogs/$blogId/$fileName');
+
+    print('Image uploaded successfully: $publicUrl');
+  } catch (e) {
+    print('Failed to upload image: $e');
+  }
+}
+

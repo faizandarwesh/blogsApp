@@ -9,6 +9,9 @@ void main() async {
   await Supabase.initialize(
     url: AppConstants.supabaseProjectUrl,
     anonKey: AppConstants.anonKey,
+    headers: {
+      "Authorization" : AppConstants.serviceKey
+    }
   );
 
   runApp(const MyApp());
@@ -22,6 +25,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        appBarTheme: const AppBarTheme(iconTheme: IconThemeData(color: Colors.white)),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
