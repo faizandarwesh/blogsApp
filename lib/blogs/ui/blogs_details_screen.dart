@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import '../model/blog.dart';
 
 class BlogsDetailsScreen extends StatelessWidget {
-  final dynamic blog;
+  final Blog blog;
 
   const BlogsDetailsScreen({
     super.key,
-    this.blog
+    required this.blog
   });
 
   @override
@@ -27,7 +28,7 @@ class BlogsDetailsScreen extends StatelessWidget {
             children: [
               const SizedBox(height: 16,),
               Text(
-                blog['title'],
+                blog.title,
                 style: Theme.of(context).textTheme.headlineLarge,
                 textAlign: TextAlign.start,
               ),
@@ -35,13 +36,13 @@ class BlogsDetailsScreen extends StatelessWidget {
                 height: 16,
               ),
               Text(
-                'Crafted by : ${blog['author']['name']}',
+                'Crafted by : ${blog.author.name}',
                 style: Theme.of(context).textTheme.bodyLarge,
                 textAlign: TextAlign.start,
               ),
               const SizedBox(height: 16,),
               Text(
-                blog['content'],
+                blog.content,
                 style: Theme.of(context).textTheme.bodyLarge,
                 textAlign: TextAlign.start,
               )

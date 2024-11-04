@@ -2,6 +2,7 @@ import 'package:blogs_app/blogs/ui/blogs_details_screen.dart';
 import 'package:blogs_app/home/controller/blogs_listing_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../blogs/model/blog.dart';
 import '../../blogs/ui/create_blog_screen.dart';
 
 class BlogsListingScreen extends StatefulWidget {
@@ -48,7 +49,10 @@ class _BlogsListingScreenState extends State<BlogsListingScreen> {
                 return const Center(child: Text('No blogs found'));
               }
 
-              final blogs = snapshot.data!;
+              // Convert the data to a list of Blog objects
+              final blogs = snapshot.data!
+                  .map((item) => Blog.fromJson(item as Map<String, dynamic>))
+                  .toList();
 
               return RefreshIndicator(
                 onRefresh: () => BlogsListingController().fetchBlogs(),
@@ -60,7 +64,7 @@ class _BlogsListingScreenState extends State<BlogsListingScreen> {
                       );
                     },
                     itemBuilder: (context, index) {
-                      final blog = blogs[index];
+                      final Blog blog = blogs[index];
 
                       return InkWell(
                         onTap: () {
@@ -72,9 +76,9 @@ class _BlogsListingScreenState extends State<BlogsListingScreen> {
                                       )));
                         },
                         child: ListTile(
-                          title: Text('${blog['title']}'),
+                          title: Text(blog.title),
                           subtitle: Text(
-                            '${blog['content']}',
+                            blog.content,
                             maxLines: 3,
                             overflow: TextOverflow.clip,
                           ),

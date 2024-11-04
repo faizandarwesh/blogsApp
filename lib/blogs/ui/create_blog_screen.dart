@@ -20,7 +20,9 @@ class CreateBlogScreen extends StatefulWidget {
 }
 
 class _CreateBlogScreenState extends State<CreateBlogScreen> {
+
   final supabase = Supabase.instance.client;
+  String coverImageUrl = "";
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
 
@@ -35,8 +37,8 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(onPressed: (){
-            uploadImage("2");
+          IconButton(onPressed: () async{
+            coverImageUrl = await uploadImage("2",coverImageUrl);
           }, icon: const Icon(Icons.save))
         ],
       ),
@@ -65,14 +67,14 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
                         hintStyle: Theme.of(context)
                             .textTheme
                             .headlineMedium!
-                            .copyWith(color: Colors.black),
+                            .copyWith(color: Colors.grey),
                         border: InputBorder.none,
                       ),
                     ),
                     const SizedBox(height: 32),
                     TextFormField(
                       controller: _contentController,
-                      style: Theme.of(context).textTheme.headlineMedium!,
+                      style: Theme.of(context).textTheme.bodyLarge!,
                       maxLines: 10,
                       minLines: 1,
                       maxLength: 500,
@@ -86,7 +88,7 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
                         hintStyle: Theme.of(context)
                             .textTheme
                             .headlineMedium!
-                            .copyWith(color: Colors.black),
+                            .copyWith(color: Colors.grey),
                         border: InputBorder.none,
                       ),
                     ),
@@ -107,7 +109,11 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
                       final title = _titleController.text.trim();
                       final content = _contentController.text.trim();
 
-                      CreateBlogController().createBlog(title, content);
+                      CreateBlogController().createBlog(context,title, content,coverImageUrl);
+                    } else{
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Please fill the required fields')),
+                      );
                     }
                   }),
             )
@@ -118,11 +124,12 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
   }
 }
 
-Future<void> uploadImage(String blogId) async {
+Future<String> uploadImage(String blogId,String coverImageUrl) async {
+
   final picker = ImagePicker();
   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-  if (pickedFile == null) return;  // User canceled the picker
+  if (pickedFile == null) return "";  // User canceled the picker
 
   final file = File(pickedFile.path);
   final fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
@@ -144,9 +151,13 @@ Future<void> uploadImage(String blogId) async {
         .from('images')
         .getPublicUrl('blogs/$blogId/$fileName');
 
+    coverImageUrl = publicUrl;
     print('Image uploaded successfully: $publicUrl');
+
   } catch (e) {
     print('Failed to upload image: $e');
   }
+
+  return coverImageUrl;
 }
 
