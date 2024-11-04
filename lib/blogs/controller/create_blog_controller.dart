@@ -2,6 +2,8 @@ import 'package:blogs_app/utils/helperfunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../home/ui/blogs_listing_screen.dart';
+
 class CreateBlogController {
   final supabase = Supabase.instance.client;
 
@@ -11,7 +13,7 @@ class CreateBlogController {
    HelperFunctions().showLoadingDialog(context);
 
     try {
-      final data = await supabase.from('blogs').insert({'title': title, 'content': content,'cover_image': imageUrl}).select();
+      final data = await supabase.from('blogs').insert({'title': title, 'content': content,'cover_image': imageUrl, 'author_id' : 1}).select();
 
       // Close the loading dialog
       Navigator.of(context).pop();
@@ -22,7 +24,12 @@ class CreateBlogController {
       );
 
       // Close the blog screen
-      Navigator.of(context).pop();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const BlogsListingScreen()),
+            (route) => false,
+      );
+      
     } catch (error) {
       // Close the loading dialog in case of error
       Navigator.of(context).pop();
