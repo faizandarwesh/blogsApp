@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "219532317084",
+    "project_id": "blogs-app-fb0a1",
+    "storage_bucket": "blogs-app-fb0a1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219532317084:android:32612753f078b2aedfb859",
+        "android_client_info": {
+          "package_name": "com.blogs.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219532317084-vo4mbmf9567l8dbahs5m09a0d1o0p7jm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ0dqNF2Vs9VNT-LIpKSRAxVdBC1sfh0w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "219532317084-vo4mbmf9567l8dbahs5m09a0d1o0p7jm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "219532317084-d5hn9o4491ivt220oqt1su3f0uo2g35l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.blogs.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

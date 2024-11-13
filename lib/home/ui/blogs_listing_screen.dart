@@ -1,7 +1,9 @@
 import 'package:blogs_app/blogs/ui/blogs_details_screen.dart';
 import 'package:blogs_app/home/controller/blogs_listing_controller.dart';
+import 'package:blogs_app/utils/helperfunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../auth/controller/auth_controller.dart';
 import '../../blogs/model/blog.dart';
 import '../../blogs/ui/create_blog_screen.dart';
 
@@ -27,6 +29,17 @@ class _BlogsListingScreenState extends State<BlogsListingScreen> {
                       builder: (context) => const CreateBlogScreen()));
             }),
         appBar: AppBar(
+          actions: [
+            IconButton(
+                onPressed: () {
+                  HelperFunctions().dialogFunction(
+                      context, 'Logout', 'Are you sure you want to logout?',
+                      () {
+                    HelperFunctions().signOut(context);
+                  });
+                },
+                icon: const Icon(Icons.power_settings_new))
+          ],
           backgroundColor: Theme.of(context).primaryColor,
           title: const Text(
             'Blogs',
@@ -38,7 +51,7 @@ class _BlogsListingScreenState extends State<BlogsListingScreen> {
             future: BlogsListingController().fetchBlogs(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator.adaptive());
               }
               // If there was an error, display a message
               if (snapshot.hasError) {
@@ -71,9 +84,8 @@ class _BlogsListingScreenState extends State<BlogsListingScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => BlogsDetailsScreen(
-                                       blog: blog
-                                      )));
+                                  builder: (context) =>
+                                      BlogsDetailsScreen(blog: blog)));
                         },
                         child: ListTile(
                           title: Text(blog.title),

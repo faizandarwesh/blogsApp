@@ -1,7 +1,6 @@
 import 'package:blogs_app/utils/helperfunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../../home/ui/blogs_listing_screen.dart';
 
 class CreateBlogController {
