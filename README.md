@@ -21,7 +21,7 @@ A simple and elegant Blog App built with the Flutter framework using Dart. This 
 - **Responsive Design**: Optimized for both Android and iOS with native feel and design elements.
 
 ## Screenshots
-*Add screenshots here once available*
+*COMING SOON!*
 
 ## Installation
 
