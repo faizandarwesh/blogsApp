@@ -1,4 +1,4 @@
-# Blog App
+# Blogs App
 
 A simple and elegant Blog App built with the Flutter framework using Dart. This app allows users to log in with Google or Apple sign-in and provides a seamless experience for reading and managing blog posts. It uses Supabase (PostgreSQL) as a backend to store user and blog data securely. The app includes a smooth UI design with features such as user authentication, blog listing, and the ability to mark blogs as favorites. Future enhancements will include additional features found in popular blog or article-related applications.
 
