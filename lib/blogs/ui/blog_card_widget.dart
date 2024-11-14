@@ -54,11 +54,8 @@ class BlogCardWidget extends StatelessWidget {
                   ),
                 ),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
-                // Error icon
                 fit: BoxFit.cover,
-                // Adjust based on your needs
                 width: double.infinity,
-                // Take full width of the container
                 height: 150, // Or any height you need
               ),
             ),
