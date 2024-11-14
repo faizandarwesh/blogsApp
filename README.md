@@ -69,14 +69,38 @@ A simple and elegant Blog App built with the Flutter framework using Dart. This 
 - **Google Sign-In**: Secure and easy authentication using Google.
 - **Apple Sign-In**: Seamless login option for iOS users.
 
-## Future Enhancements
-- **Enhanced Search**: Allow users to search for blogs by keywords or tags.
-- **Categories and Tags**: Organize blogs into categories or tags for easier navigation.
-- **Comments Section**: Enable users to leave comments on blogs.
-- **Share Blogs**: Allow users to share blogs with others through social media or messaging apps.
-- **Notifications**: Send notifications to users for new blog posts or updates.
-- **User Profiles**: Enable users to view and edit their profile details.
+Here's how you can structure the "Future Enhancements" section for your GitHub README:
 
+---
+
+## Future Enhancements
+
+Here are some planned improvements and features that we aim to add to the Blogs App:
+
+- **Pull-to-Refresh Bug Fixes**  
+  Improve the pull-to-refresh functionality to ensure smooth and bug-free refreshing of blog lists.
+
+- **Delete Blog Functionality**  
+  Enable users to delete their blogs with confirmation prompts for better control over their content.
+
+- **Unit Testing**  
+  Add comprehensive unit tests to ensure code reliability, stability, and maintainability across all features.
+
+- **Comments Functionality**  
+  Implement a comments section for each blog, allowing users to engage with content and provide feedback.
+
+- **Share Blog Functionality**  
+  Allow users to share blogs with others through social media, messaging apps, or email to expand reach and engagement.
+
+- **User-Specific Blog Display**  
+  Display all blogs by default while allowing users to filter and view only the blogs they have authored.
+
+- **Apple Sign-In**  
+  Add Apple Sign-In to give users more flexibility and choice in how they authenticate.
+
+These enhancements will be implemented in future releases to further improve the user experience and functionality of the Blogs App. Stay tuned!
+
+--- 
 ## Contributing
 Contributions are welcome! If you'd like to contribute to this project, please follow these steps:
 1. Fork the repository.
