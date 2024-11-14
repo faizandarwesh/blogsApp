@@ -1,5 +1,6 @@
 import 'package:blogs_app/blogs/controller/create_blog_controller.dart';
 import 'package:blogs_app/utils/custom_button.dart';
+import 'package:blogs_app/utils/helperfunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,9 +21,9 @@ class CreateBlogScreen extends StatefulWidget {
 }
 
 class _CreateBlogScreenState extends State<CreateBlogScreen> {
-
   final supabase = Supabase.instance.client;
   String coverImageUrl = "";
+  int minLength = 500;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
 
@@ -37,9 +38,11 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(onPressed: () async{
-            coverImageUrl = await uploadImage("2",coverImageUrl);
-          }, icon: const Icon(Icons.save))
+          IconButton(
+              onPressed: () async {
+                coverImageUrl = await uploadImage("2", coverImageUrl);
+              },
+              icon: const Icon(Icons.save))
         ],
       ),
       body: SafeArea(
@@ -75,9 +78,9 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
                     TextFormField(
                       controller: _contentController,
                       style: Theme.of(context).textTheme.bodyLarge!,
-                      maxLines: 10,
-                      minLines: 1,
-                      maxLength: 500,
+                      maxLines: null,
+                      minLines: 10,
+                      maxLength: 25000,
                       keyboardType: TextInputType.multiline,
                       textCapitalization: TextCapitalization.sentences,
                       decoration: InputDecoration(
@@ -103,16 +106,27 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: CustomButton(
                   label: 'Post',
-                  onPressed: () {
+                  onPressed: () async {
                     if (_titleController.text.trim().isNotEmpty &&
                         _contentController.text.trim().isNotEmpty) {
-                      final title = _titleController.text.trim();
-                      final content = _contentController.text.trim();
+                      if (_contentController.text.length < minLength) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text(
+                                  'Content must be at least $minLength characters long')),
+                        );
+                      } else {
+                        final title = _titleController.text.trim();
+                        final content = _contentController.text.trim();
 
-                      CreateBlogController().createBlog(context,title, content,coverImageUrl);
-                    } else{
+                        int? authorId = await HelperFunctions().getUserId();
+                        CreateBlogController().createBlog(
+                            context, authorId!, title, content, coverImageUrl);
+                      }
+                    } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Please fill the required fields')),
+                        const SnackBar(
+                            content: Text('Please fill the required fields')),
                       );
                     }
                   }),
@@ -124,25 +138,26 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
   }
 }
 
-Future<String> uploadImage(String blogId,String coverImageUrl) async {
-
+Future<String> uploadImage(String blogId, String coverImageUrl) async {
   final picker = ImagePicker();
   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-  if (pickedFile == null) return "";  // User canceled the picker
+  if (pickedFile == null) return ""; // User canceled the picker
 
   final file = File(pickedFile.path);
   final fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
 
   try {
     // Upload file to the 'blog-images' bucket in Supabase Storage
-    final response = await Supabase.instance.client.storage.from('images').upload(
-      'blogs/$blogId/$fileName',
-      file,
-        fileOptions: const FileOptions(cacheControl: '3600', upsert: false),
-    );
+    final response = await Supabase.instance.client.storage
+        .from('images')
+        .upload(
+          'blogs/$blogId/$fileName',
+          file,
+          fileOptions: const FileOptions(cacheControl: '3600', upsert: false),
+        );
 
-  /*  if (response != null) {
+    /*  if (response != null) {
       throw Exception(response!.message);
     }*/
 
@@ -153,11 +168,9 @@ Future<String> uploadImage(String blogId,String coverImageUrl) async {
 
     coverImageUrl = publicUrl;
     print('Image uploaded successfully: $publicUrl');
-
   } catch (e) {
     print('Failed to upload image: $e');
   }
 
   return coverImageUrl;
 }
-

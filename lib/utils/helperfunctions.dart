@@ -22,6 +22,21 @@ class HelperFunctions {
     await prefs.remove(AppConstants.isLoggedIn);
   }
 
+  Future<void> setUserId(int userId) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(AppConstants.userId, userId);
+  }
+
+  Future<int?> getUserId() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(AppConstants.userId);
+  }
+
+  Future<void> clearUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(AppConstants.userId);
+  }
+
   void showLoadingDialog(BuildContext context) {
     showDialog(
       context: context,

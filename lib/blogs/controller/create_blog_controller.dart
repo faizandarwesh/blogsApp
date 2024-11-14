@@ -6,13 +6,13 @@ import '../../home/ui/blogs_listing_screen.dart';
 class CreateBlogController {
   final supabase = Supabase.instance.client;
 
-  createBlog(BuildContext context,String title, String content,String imageUrl) async {
+  createBlog(BuildContext context,int authorId, String title, String content,String imageUrl) async {
 
     //Show loading dialog
    HelperFunctions().showLoadingDialog(context);
 
     try {
-      final data = await supabase.from('blogs').insert({'title': title, 'content': content,'cover_image': imageUrl, 'author_id' : 1}).select();
+      final data = await supabase.from('blogs').insert({'title': title, 'content': content,'cover_image': imageUrl, 'author_id' : authorId}).select();
 
       // Close the loading dialog
       Navigator.of(context).pop();

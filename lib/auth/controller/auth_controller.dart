@@ -33,8 +33,12 @@ class AuthController {
           (route) => false,
         );
 
+
+        final response = await supabase.from('author').select();
+
         //Add record in shared preferences to remember user is already logged in
         HelperFunctions().saveLoginStatus(true);
+        HelperFunctions().setUserId(response[0]['id']);
       } else {
         final response = await supabase.from('author').upsert({
           'google_id': userId,
@@ -54,6 +58,7 @@ class AuthController {
 
         //Add record in shared preferences to remember user is already logged in
         HelperFunctions().saveLoginStatus(true);
+        HelperFunctions().setUserId(response[0]['id']);
       }
     } catch (error) {
       print("Something went wrong : $error");

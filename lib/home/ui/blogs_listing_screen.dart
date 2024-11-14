@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../../blogs/model/blog.dart';
+import '../../blogs/ui/blog_card_widget.dart';
 import '../../blogs/ui/create_blog_screen.dart';
 
 class BlogsListingScreen extends StatefulWidget {
@@ -21,6 +22,7 @@ class _BlogsListingScreenState extends State<BlogsListingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
+            backgroundColor: Theme.of(context).primaryColor,
             child: const Icon(Icons.add),
             onPressed: () {
               Navigator.push(
@@ -51,7 +53,8 @@ class _BlogsListingScreenState extends State<BlogsListingScreen> {
             future: BlogsListingController().fetchBlogs(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator.adaptive());
+                return const Center(
+                    child: CircularProgressIndicator.adaptive());
               }
               // If there was an error, display a message
               if (snapshot.hasError) {
@@ -59,7 +62,9 @@ class _BlogsListingScreenState extends State<BlogsListingScreen> {
               }
               // If the list is empty, show a message
               if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text('No blogs found'));
+                return Center(
+                    child: Image.asset(
+                        "assets/images/empty_blogs_placeholder.png"));
               }
 
               // Convert the data to a list of Blog objects
@@ -69,33 +74,18 @@ class _BlogsListingScreenState extends State<BlogsListingScreen> {
 
               return RefreshIndicator(
                 onRefresh: () => BlogsListingController().fetchBlogs(),
-                child: ListView.separated(
+                child: ListView.builder(
                     itemCount: blogs.length,
-                    separatorBuilder: (context, index) {
-                      return const Divider(
-                        height: 16,
-                      );
-                    },
                     itemBuilder: (context, index) {
                       final Blog blog = blogs[index];
 
-                      return InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      BlogsDetailsScreen(blog: blog)));
-                        },
-                        child: ListTile(
-                          title: Text(blog.title),
-                          subtitle: Text(
-                            blog.content,
-                            maxLines: 3,
-                            overflow: TextOverflow.clip,
-                          ),
-                        ),
-                      );
+                      return BlogCardWidget(imageUrl: "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", title: blog.title, content: blog.content, onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    BlogsDetailsScreen(blog: blog)));
+                      });
                     }),
               );
             }));
