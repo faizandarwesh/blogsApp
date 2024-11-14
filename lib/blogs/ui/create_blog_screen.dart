@@ -40,7 +40,8 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
         actions: [
           IconButton(
               onPressed: () async {
-                coverImageUrl = await uploadImage("2", coverImageUrl);
+                int? authorId = await HelperFunctions().getUserId();
+                coverImageUrl = await uploadImage(authorId!, coverImageUrl);
               },
               icon: const Icon(Icons.save))
         ],
@@ -138,7 +139,7 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
   }
 }
 
-Future<String> uploadImage(String blogId, String coverImageUrl) async {
+Future<String> uploadImage(int userId, String coverImageUrl) async {
   final picker = ImagePicker();
   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
@@ -152,7 +153,7 @@ Future<String> uploadImage(String blogId, String coverImageUrl) async {
     final response = await Supabase.instance.client.storage
         .from('images')
         .upload(
-          'blogs/$blogId/$fileName',
+          'blogs/$userId/$fileName',
           file,
           fileOptions: const FileOptions(cacheControl: '3600', upsert: false),
         );
@@ -164,7 +165,7 @@ Future<String> uploadImage(String blogId, String coverImageUrl) async {
     // Optional: Get the public URL (if bucket is public)
     final publicUrl = Supabase.instance.client.storage
         .from('images')
-        .getPublicUrl('blogs/$blogId/$fileName');
+        .getPublicUrl('blogs/$userId/$fileName');
 
     coverImageUrl = publicUrl;
     print('Image uploaded successfully: $publicUrl');

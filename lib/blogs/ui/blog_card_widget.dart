@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 
@@ -40,11 +41,25 @@ class BlogCardWidget extends StatelessWidget {
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
               ),
-              child: Image.network(
-                imageUrl,
-                height: 150,
-                width: double.infinity,
+              child: CachedNetworkImage(
+                imageUrl: imageUrl.isEmpty
+                    ? "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    : imageUrl,
+                placeholder: (context, url) => Container(
+                  width: double.infinity,
+                  height: 150, // Specify a fixed height or aspect ratio
+                  color: Colors.grey[300], // Placeholder color
+                  child: const Center(
+                    child: CircularProgressIndicator.adaptive(), // Loading indicator
+                  ),
+                ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+                // Error icon
                 fit: BoxFit.cover,
+                // Adjust based on your needs
+                width: double.infinity,
+                // Take full width of the container
+                height: 150, // Or any height you need
               ),
             ),
             Padding(
