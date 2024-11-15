@@ -24,9 +24,9 @@ class AuthController {
           .from('author')
           .select()
           .eq('email', email as Object)
-          .single();
+          .maybeSingle();
 
-      if (existingUser.isNotEmpty) {
+      if (existingUser != null) {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const BlogsListingScreen()),
