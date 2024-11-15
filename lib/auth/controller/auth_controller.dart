@@ -27,18 +27,16 @@ class AuthController {
           .maybeSingle();
 
       if (existingUser != null) {
+
+        //Add record in shared preferences to remember user is already logged in
+        HelperFunctions().saveLoginStatus(true);
+        HelperFunctions().setUserId(existingUser['id']);
+
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const BlogsListingScreen()),
           (route) => false,
         );
-
-
-        final response = await supabase.from('author').select();
-
-        //Add record in shared preferences to remember user is already logged in
-        HelperFunctions().saveLoginStatus(true);
-        HelperFunctions().setUserId(response[0]['id']);
       } else {
         final response = await supabase.from('author').upsert({
           'google_id': userId,

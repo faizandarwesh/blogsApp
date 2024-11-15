@@ -103,6 +103,7 @@ class HelperFunctions {
 
     //Clear isLoggedIn record from Shared Preference
     HelperFunctions().clearLoginStatus();
+    HelperFunctions().clearUserId();
 
     //Clear all the previous route and redirect user to logout screen
     Navigator.pushAndRemoveUntil(
@@ -143,5 +144,54 @@ class HelperFunctions {
       print("Error during Google Sign-In: $error");
       return null;
     }
+  }
+
+  void showCustomBottomSheet(BuildContext context, VoidCallback onEdit, VoidCallback onDelete) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoActionSheet(
+          title: const Text('Actions'),
+          message: const Text('Choose an action for the blog'),
+          actions: [
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context); // Close the bottom sheet
+                onEdit(); // Call the Edit callback
+              },
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(CupertinoIcons.pencil, color: Colors.blue),
+                  SizedBox(width: 8),
+                  Text('Edit', style: TextStyle(color: Colors.blue)),
+                ],
+              ),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context); // Close the bottom sheet
+                onDelete(); // Call the Delete callback
+              },
+              isDestructiveAction: true,
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(CupertinoIcons.trash, color: CupertinoColors.destructiveRed),
+                  SizedBox(width: 8),
+                  Text('Delete', style: TextStyle(color: CupertinoColors.destructiveRed)),
+                ],
+              ),
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context); // Close the bottom sheet
+            },
+            child: const Text('Cancel'),
+          ),
+        );
+      },
+    );
   }
 }

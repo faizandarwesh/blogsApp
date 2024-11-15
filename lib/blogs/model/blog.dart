@@ -39,19 +39,22 @@ class Blog {
 }
 
 class Author {
+  final int id;
   final String name;
 
-  Author({required this.name});
+  Author({required this.name, required this.id});
 
   factory Author.fromJson(Map<String, dynamic> json) {
     return Author(
       name: json['name'] as String,
+      id: json['id'] as int,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'name': name,
+      'id': id,
     };
   }
 }

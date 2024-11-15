@@ -3,7 +3,6 @@ import 'package:blogs_app/home/controller/blogs_listing_controller.dart';
 import 'package:blogs_app/utils/helperfunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../auth/controller/auth_controller.dart';
 import '../../blogs/model/blog.dart';
 import '../../blogs/ui/blog_card_widget.dart';
 import '../../blogs/ui/create_blog_screen.dart';
@@ -17,12 +16,25 @@ class BlogsListingScreen extends StatefulWidget {
 
 class _BlogsListingScreenState extends State<BlogsListingScreen> {
   final supabase = Supabase.instance.client;
+  late int currentUserId;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      HelperFunctions().getUserId().then((value) {
+        currentUserId = value!;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-            backgroundColor: Theme.of(context).primaryColor,
+            backgroundColor: Theme
+                .of(context)
+                .primaryColor,
             child: const Icon(Icons.add),
             onPressed: () {
               Navigator.push(
@@ -36,13 +48,15 @@ class _BlogsListingScreenState extends State<BlogsListingScreen> {
                 onPressed: () {
                   HelperFunctions().dialogFunction(
                       context, 'Logout', 'Are you sure you want to logout?',
-                      () {
-                    HelperFunctions().signOut(context);
-                  });
+                          () {
+                        HelperFunctions().signOut(context);
+                      });
                 },
                 icon: const Icon(Icons.power_settings_new))
           ],
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: Theme
+              .of(context)
+              .primaryColor,
           title: const Text(
             'Blogs',
             style: TextStyle(color: Colors.white),
@@ -80,15 +94,15 @@ class _BlogsListingScreenState extends State<BlogsListingScreen> {
                       final Blog blog = blogs[index];
 
                       return BlogCardWidget(
-                          imageUrl: blog.coverImage!,
-                          title: blog.title,
-                          content: blog.content,
+                          blog: blog,
                           onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        BlogsDetailsScreen(blog: blog)));
+                                        BlogsDetailsScreen(
+                                            currentUserId: currentUserId,
+                                            blog: blog)));
                           });
                     }),
               );

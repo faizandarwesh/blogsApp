@@ -1,19 +1,20 @@
-import 'package:blogs_app/blogs/controller/create_blog_controller.dart';
+import 'package:blogs_app/blogs/controller/blog_controller.dart';
 import 'package:blogs_app/utils/custom_button.dart';
 import 'package:blogs_app/utils/helperfunctions.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 
 class CreateBlogScreen extends StatefulWidget {
   final String title;
   final String content;
+  final String coverImageUrl;
 
   const CreateBlogScreen({
     super.key,
     this.title = "",
     this.content = "",
+    this.coverImageUrl = "",
   });
 
   @override
@@ -22,10 +23,20 @@ class CreateBlogScreen extends StatefulWidget {
 
 class _CreateBlogScreenState extends State<CreateBlogScreen> {
   final supabase = Supabase.instance.client;
-  String coverImageUrl = "";
+  String coverImage = "";
   int minLength = 500;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
+
+  @override
+  void initState() {
+    if (widget.title.isNotEmpty && widget.content.isNotEmpty) {
+      _titleController.text = widget.title;
+      _contentController.text = widget.content;
+      coverImage = widget.coverImageUrl;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +52,8 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
           IconButton(
               onPressed: () async {
                 int? authorId = await HelperFunctions().getUserId();
-                coverImageUrl = await uploadImage(authorId!, coverImageUrl);
+                coverImage = await BlogController()
+                    .uploadBlogCoverImage(context, authorId!, coverImage);
               },
               icon: const Icon(Icons.save))
         ],
@@ -55,6 +67,28 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
                 child: Column(
                   children: [
                     const SizedBox(height: 16),
+                    if (widget.coverImageUrl.isNotEmpty) ...[
+                      CachedNetworkImage(
+                        imageUrl: widget.coverImageUrl,
+                        placeholder: (context, url) => Container(
+                          width: double.infinity,
+                          height: 200,
+                          // Specify a fixed height or aspect ratio
+                          color: Colors.grey[300],
+                          // Placeholder color
+                          child: const Center(
+                            child: CircularProgressIndicator
+                                .adaptive(), // Loading indicator
+                          ),
+                        ),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: 150, // Or any height you need
+                      ),
+                      const SizedBox(height: 16,)
+                    ],
                     TextFormField(
                       controller: _titleController,
                       style: Theme.of(context).textTheme.headlineMedium!,
@@ -62,7 +96,7 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
                       minLines: 1,
                       maxLength: 50,
                       keyboardType: TextInputType.multiline,
-                      textCapitalization: TextCapitalization.words,
+                      textCapitalization: TextCapitalization.sentences,
                       decoration: InputDecoration(
                         counterText: '',
                         contentPadding:
@@ -121,8 +155,8 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
                         final content = _contentController.text.trim();
 
                         int? authorId = await HelperFunctions().getUserId();
-                        CreateBlogController().createBlog(
-                            context, authorId!, title, content, coverImageUrl);
+                        BlogController().createBlog(
+                            context, authorId!, title, content, coverImage);
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -137,41 +171,4 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
       ),
     );
   }
-}
-
-Future<String> uploadImage(int userId, String coverImageUrl) async {
-  final picker = ImagePicker();
-  final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-  if (pickedFile == null) return ""; // User canceled the picker
-
-  final file = File(pickedFile.path);
-  final fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-  try {
-    // Upload file to the 'blog-images' bucket in Supabase Storage
-    final response = await Supabase.instance.client.storage
-        .from('images')
-        .upload(
-          'blogs/$userId/$fileName',
-          file,
-          fileOptions: const FileOptions(cacheControl: '3600', upsert: false),
-        );
-
-    /*  if (response != null) {
-      throw Exception(response!.message);
-    }*/
-
-    // Optional: Get the public URL (if bucket is public)
-    final publicUrl = Supabase.instance.client.storage
-        .from('images')
-        .getPublicUrl('blogs/$userId/$fileName');
-
-    coverImageUrl = publicUrl;
-    print('Image uploaded successfully: $publicUrl');
-  } catch (e) {
-    print('Failed to upload image: $e');
-  }
-
-  return coverImageUrl;
 }

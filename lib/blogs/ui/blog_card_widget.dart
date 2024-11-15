@@ -1,18 +1,16 @@
+import 'package:blogs_app/utils/helperfunctions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+import '../model/blog.dart';
 
 class BlogCardWidget extends StatelessWidget {
-  final String imageUrl;
-  final String title;
-  final String content;
+  final Blog blog;
   final VoidCallback onTap;
 
   const BlogCardWidget({
     super.key,
-    required this.imageUrl,
-    required this.title,
-    required this.content,
+    required this.blog,
     required this.onTap,
   });
 
@@ -42,15 +40,16 @@ class BlogCardWidget extends StatelessWidget {
                 topRight: Radius.circular(16),
               ),
               child: CachedNetworkImage(
-                imageUrl: imageUrl.isEmpty
+                imageUrl: blog.coverImage!.isEmpty
                     ? "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    : imageUrl,
+                    : blog.coverImage!,
                 placeholder: (context, url) => Container(
                   width: double.infinity,
                   height: 150, // Specify a fixed height or aspect ratio
                   color: Colors.grey[300], // Placeholder color
                   child: const Center(
-                    child: CircularProgressIndicator.adaptive(), // Loading indicator
+                    child: CircularProgressIndicator
+                        .adaptive(), // Loading indicator
                   ),
                 ),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
@@ -65,20 +64,20 @@ class BlogCardWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    blog.title,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    content,
+                    blog.content,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.white70,
-                    ),
+                          color: Colors.white70,
+                        ),
                   ),
                 ],
               ),
