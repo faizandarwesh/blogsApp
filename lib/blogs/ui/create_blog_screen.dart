@@ -54,6 +54,7 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
                 int? authorId = await HelperFunctions().getUserId();
                 coverImage = await BlogController()
                     .uploadBlogCoverImage(context, authorId!, coverImage);
+                setState(() {});
               },
               icon: const Icon(Icons.save))
         ],
@@ -68,26 +69,10 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
                   children: [
                     const SizedBox(height: 16),
                     if (widget.coverImageUrl.isNotEmpty) ...[
-                      CachedNetworkImage(
-                        imageUrl: widget.coverImageUrl,
-                        placeholder: (context, url) => Container(
-                          width: double.infinity,
-                          height: 200,
-                          // Specify a fixed height or aspect ratio
-                          color: Colors.grey[300],
-                          // Placeholder color
-                          child: const Center(
-                            child: CircularProgressIndicator
-                                .adaptive(), // Loading indicator
-                          ),
-                        ),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: 150, // Or any height you need
-                      ),
-                      const SizedBox(height: 16,)
+                      buildCoverImage(widget.coverImageUrl),
+                    ],
+                    if (coverImage != "") ...[
+                      buildCoverImage(coverImage),
                     ],
                     TextFormField(
                       controller: _titleController,
@@ -169,6 +154,29 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildCoverImage(String imageUrl) {
+    return Column(
+      children: [
+        CachedNetworkImage(
+          imageUrl: imageUrl,
+          placeholder: (context, url) => Container(
+            width: double.infinity,
+            height: 200,
+            color: Colors.grey[300],
+            child: const Center(
+              child: CircularProgressIndicator.adaptive(),
+            ),
+          ),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: 150,
+        ),
+        const SizedBox(height: 16),
+      ],
     );
   }
 }
