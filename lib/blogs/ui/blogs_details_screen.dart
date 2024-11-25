@@ -3,6 +3,7 @@ import 'package:blogs_app/blogs/ui/create_blog_screen.dart';
 import 'package:blogs_app/utils/helperfunctions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../home/ui/blogs_listing_screen.dart';
 import '../model/blog.dart';
 
@@ -40,7 +41,7 @@ class BlogsDetailsScreen extends StatelessWidget {
                   }, () {
                     HelperFunctions().dialogFunction(context, "Delete",
                         "Are you sure you want to delete this blog?", () {
-                      BlogController().deleteBlog(context, blog.id);
+                      BlogController(supabase: Supabase.instance.client, helperFunctions: HelperFunctions()).deleteBlog(context, blog.id);
                     });
                   });
                 },

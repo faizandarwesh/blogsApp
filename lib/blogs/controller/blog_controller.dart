@@ -7,13 +7,16 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../home/ui/blogs_listing_screen.dart';
 
 class BlogController {
-  final supabase = Supabase.instance.client;
+  final SupabaseClient supabase;
+  final HelperFunctions helperFunctions;
 
-  createBlog(BuildContext context, int authorId, String title, String content,
-      String imageUrl) async {
-    //Show loading dialog
-    HelperFunctions().showLoadingDialog(context);
+  BlogController({
+    required this.supabase,
+    required this.helperFunctions,
+  });
 
+  Future<String> createBlog(
+      int authorId, String title, String content, String imageUrl) async {
     try {
       final data = await supabase.from('blogs').insert({
         'title': title,
@@ -21,36 +24,13 @@ class BlogController {
         'cover_image': imageUrl,
         'author_id': authorId
       }).select();
-
-      // Close the loading dialog
-      Navigator.of(context).pop();
-
       if (data.isNotEmpty) {
-        // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Blog posted successfully')),
-        );
-
-        // Close the blog screen
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const BlogsListingScreen()),
-          (route) => false,
-        );
+        return 'success';
       } else {
-        // Show error message
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Something went wrong')),
-        );
+        return 'error';
       }
     } catch (error) {
-      // Close the loading dialog in case of error
-      Navigator.of(context).pop();
-
-      // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to post blog: $error')),
-      );
+      return 'exception';
     }
   }
 
@@ -93,15 +73,14 @@ class BlogController {
     return coverImageUrl;
   }
 
-  deleteBlog(BuildContext context, int blogId) async{
-
+  deleteBlog(BuildContext context, int blogId) async {
     //Show loading dialog
     HelperFunctions().showLoadingDialog(context);
 
-    final response = await supabase.from('blogs').delete().eq('id', blogId).select();
+    final response =
+        await supabase.from('blogs').delete().eq('id', blogId).select();
 
-    if(response.isNotEmpty){
-
+    if (response.isNotEmpty) {
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Blog removed successfully')),
@@ -111,10 +90,9 @@ class BlogController {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const BlogsListingScreen()),
-            (route) => false,
+        (route) => false,
       );
-    }
-    else {
+    } else {
       // Show error message
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Something went wrong')),

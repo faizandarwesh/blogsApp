@@ -1,9 +1,12 @@
 import 'package:blogs_app/blogs/controller/blog_controller.dart';
+import 'package:blogs_app/home/ui/home_screen.dart';
 import 'package:blogs_app/utils/custom_button.dart';
 import 'package:blogs_app/utils/helperfunctions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../home/ui/blogs_listing_screen.dart';
 
 class CreateBlogScreen extends StatefulWidget {
   final String title;
@@ -52,7 +55,9 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
           IconButton(
               onPressed: () async {
                 int? authorId = await HelperFunctions().getUserId();
-                coverImage = await BlogController()
+                coverImage = await BlogController(
+                        supabase: Supabase.instance.client,
+                        helperFunctions: HelperFunctions())
                     .uploadBlogCoverImage(context, authorId!, coverImage);
                 setState(() {});
               },
@@ -139,9 +144,40 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
                         final title = _titleController.text.trim();
                         final content = _contentController.text.trim();
 
+                        //Show loading dialog
+                        HelperFunctions().showLoadingDialog(context);
+
                         int? authorId = await HelperFunctions().getUserId();
-                        BlogController().createBlog(
-                            context, authorId!, title, content, coverImage);
+                        final result = await BlogController(
+                                supabase: Supabase.instance.client,
+                                helperFunctions: HelperFunctions())
+                            .createBlog(authorId!, title, content, coverImage);
+
+                        // Close the loading dialog
+                        Navigator.of(context).pop();
+
+                        if (result == 'success') {
+                          // Show success message
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Blog posted successfully')),
+                          );
+
+                          // Close the blog screen
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const HomeScreen()),
+                            (route) => false,
+                          );
+                        } else {
+                          // Show error message
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Something went wrong')),
+                          );
+                        }
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(

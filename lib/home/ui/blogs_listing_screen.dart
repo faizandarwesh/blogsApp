@@ -42,27 +42,6 @@ class _BlogsListingScreenState extends State<BlogsListingScreen> {
                   MaterialPageRoute(
                       builder: (context) => const CreateBlogScreen()));
             }),
-        appBar: AppBar(
-          actions: [
-            IconButton(
-                onPressed: () {
-                  HelperFunctions().dialogFunction(
-                      context, 'Logout', 'Are you sure you want to logout?',
-                          () {
-                        HelperFunctions().signOut(context);
-                      });
-                },
-                icon: const Icon(Icons.power_settings_new))
-          ],
-          backgroundColor: Theme
-              .of(context)
-              .primaryColor,
-          title: const Text(
-            'Blogs',
-            style: TextStyle(color: Colors.white),
-          ),
-          centerTitle: true,
-        ),
         body: FutureBuilder<List<dynamic>>(
             future: BlogsListingController().fetchBlogs(),
             builder: (context, snapshot) {
