@@ -1,5 +1,6 @@
 import 'package:blogs_app/auth/ui/signup_screen.dart';
 import 'package:blogs_app/home/ui/blogs_listing_screen.dart';
+import 'package:blogs_app/home/ui/home_screen.dart';
 import 'package:blogs_app/utils/app_constants.dart';
 import 'package:blogs_app/utils/helperfunctions.dart';
 import 'package:blogs_app/utils/theme/theme_config.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.done) {
               // If logged in, show Home screen; otherwise, show Login screen
               return snapshot.data == true
-                  ? const BlogsListingScreen()
+                  ? const HomeScreen()
                   : const SignUpScreen();
             }
             // While waiting for the future to complete, show a loading spinner

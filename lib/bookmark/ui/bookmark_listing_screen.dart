@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class FavoritesListingScreen extends StatelessWidget {
-  const FavoritesListingScreen({super.key});
+class BookmarksListingScreen extends StatelessWidget {
+  const BookmarksListingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +10,7 @@ class FavoritesListingScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          Text("Favorites !",),
+          Text("Bookmarks !",),
           Text("COMING SOON!",),
         ],),
       ),
