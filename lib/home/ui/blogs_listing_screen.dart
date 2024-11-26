@@ -80,7 +80,6 @@ class _BlogsListingScreenState extends State<BlogsListingScreen> {
                                 MaterialPageRoute(
                                     builder: (context) =>
                                         BlogsDetailsScreen(
-                                            currentUserId: currentUserId,
                                             blog: blog)));
                           });
                     }),

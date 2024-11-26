@@ -1,18 +1,17 @@
 import 'package:blogs_app/blogs/controller/blog_controller.dart';
 import 'package:blogs_app/blogs/ui/create_blog_screen.dart';
+import 'package:blogs_app/main.dart';
 import 'package:blogs_app/utils/helperfunctions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../home/ui/blogs_listing_screen.dart';
 import '../model/blog.dart';
 
 class BlogsDetailsScreen extends StatelessWidget {
   final Blog blog;
-  final int currentUserId;
 
   const BlogsDetailsScreen(
-      {super.key, required this.blog, required this.currentUserId});
+      {super.key, required this.blog,});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +23,7 @@ class BlogsDetailsScreen extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
         actions: [
-          if (blog.author.id == currentUserId) ...[
+          if (blog.author.id == userId) ...[
             IconButton(
                 onPressed: () {
                   HelperFunctions().showCustomBottomSheet(context, () {

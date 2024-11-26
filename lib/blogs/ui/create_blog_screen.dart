@@ -6,7 +6,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../home/ui/blogs_listing_screen.dart';
 
 class CreateBlogScreen extends StatefulWidget {
   final String title;
@@ -168,7 +167,7 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    const HomeScreen()),
+                                     const HomeScreen()),
                             (route) => false,
                           );
                         } else {

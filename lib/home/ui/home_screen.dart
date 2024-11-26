@@ -15,15 +15,16 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = [
-    const BlogsListingScreen(),
-    const BookmarksListingScreen(),
-    const PersonalBlogScreen(),
-    const UserProfileScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
+
+    final List<Widget> screens = [
+      const BlogsListingScreen(),
+      const BookmarksListingScreen(),
+      const PersonalBlogScreen(),
+      const UserProfileScreen(),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -43,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         centerTitle: true,
       ),
-      body: _screens[_currentIndex],
+      body: screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         elevation: 0,
         currentIndex: _currentIndex,
@@ -53,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
         backgroundColor: Colors.transparent,
-        selectedItemColor: Colors.white,
+        selectedItemColor: const Color(0xFF6750A4),
         unselectedItemColor: Colors.white,
         showSelectedLabels: true,
         showUnselectedLabels: true,
