@@ -30,14 +30,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       userProfileController.getUserProfile().then((value){
         print("initState : $value");
 
-        _userName = "John Doe";
-        _phoneNumber = "123-456-7890";
-        _description = "Hey, I'm good";
-        _email = "john.doe@example.com";
+
       });
     });
     super.initState();
-
+    _userName = "John Doe";
+    _phoneNumber = "123-456-7890";
+    _description = "Hey, I'm good";
+    _email = "john.doe@example.com";
   }
 
   // Function to pick an image from camera or gallery
