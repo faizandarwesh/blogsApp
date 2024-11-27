@@ -17,11 +17,18 @@ A simple and elegant Blog App built with the Flutter framework using Dart. This 
 - **User Authentication**: Users can sign in using Google or Apple sign-in, making it easy and secure.
 - **Blog Listing**: Displays a list of blog posts with a smooth, user-friendly UI.
 - **Supabase Integration**: Utilizes Supabase with PostgreSQL to store user and blog data, offering reliable and scalable storage.
-- **Favorites**: Users can mark their favorite blogs and view them in a dedicated section.
-- **Responsive Design**: Optimized for both Android and iOS with native feel and design elements.
+- **Bookmarks**: Users can bookmark their favorite blogs and view them in a dedicated section.
+- **Responsive Design**: Optimized for Android and iOS with native feel and design elements.
 
 ## Screenshots
-*COMING SOON!*
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/171b2898-008d-4b7d-bc86-676a5654c439" alt="Blogs Listing Screen" width="18%">
+ <img src="https://github.com/user-attachments/assets/ef7b99c4-8647-4925-990d-8f654e6a7f0c" alt="Authentication Screen" width="18%">
+ <img src="https://github.com/user-attachments/assets/cdcf97cd-fcd9-425f-ab1b-aaa1cb8a15a8" alt="Profile Screen" width="18%">
+ <img src="https://github.com/user-attachments/assets/e337c443-e161-4436-91be-15d98d1fcb09" alt="Blog Detail Screen" width="18%">
+ <img src="https://github.com/user-attachments/assets/f0a9e0b0-b366-4a1d-81eb-2e714f0c7b1a" alt="Bookmarks Screen" width="18%"> 
+</p>
+
 
 ## Installation
 
@@ -80,20 +87,11 @@ Here are some planned improvements and features that we aim to add to the Blogs 
 - **Pull-to-Refresh Bug Fixes**  
   Improve the pull-to-refresh functionality to ensure smooth and bug-free refreshing of blog lists.
 
-- **Delete Blog Functionality**  
-  Enable users to delete their blogs with confirmation prompts for better control over their content.
-
-- **Unit Testing**  
-  Add comprehensive unit tests to ensure code reliability, stability, and maintainability across all features.
-
 - **Comments Functionality**  
   Implement a comments section for each blog, allowing users to engage with content and provide feedback.
 
 - **Share Blog Functionality**  
   Allow users to share blogs with others through social media, messaging apps, or email to expand reach and engagement.
-
-- **User-Specific Blog Display**  
-  Display all blogs by default while allowing users to filter and view only the blogs they have authored.
 
 - **Apple Sign-In**  
   Add Apple Sign-In to give users more flexibility and choice in how they authenticate.
